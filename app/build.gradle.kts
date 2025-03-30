@@ -65,6 +65,9 @@ dependencies {
     implementation("com.squareup:kotlinpoet:1.13.0")
     implementation("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.4.0")
 
+    implementation("androidx.media3:media3-exoplayer:1.1.1")
+    implementation("androidx.media3:media3-ui:1.1.1")
+
 
     val room_version = "2.6.0"
     implementation("androidx.room:room-runtime:$room_version")

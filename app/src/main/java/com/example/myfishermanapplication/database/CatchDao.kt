@@ -22,4 +22,13 @@ interface CatchDao {
 
     @Query("SELECT * FROM `Catch` WHERE id = :id")
     suspend fun getCatchById(id: String): Catch?
+
+    @Query("SELECT COUNT(*) FROM `Catch`")
+    fun getTotalCatches(): Flow<Int>
+
+    @Query("SELECT fishWeight FROM `Catch`")
+    fun getAllWeights(): Flow<List<String>>
+
+    @Query("SELECT location FROM `Catch`")
+    fun getAllLocations(): Flow<List<String>>
 }

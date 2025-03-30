@@ -7,6 +7,12 @@ class CatchRepository(private val catchDao: CatchDao) {
 
     val allCatches: Flow<List<Catch>> = catchDao.getAllCatches()
 
+    fun getTotalCatches(): Flow<Int> = catchDao.getTotalCatches()
+
+    fun getAllWeights(): Flow<List<String>> = catchDao.getAllWeights()
+
+    fun getAllLocations(): Flow<List<String>> = catchDao.getAllLocations()
+
     suspend fun insert(catch: Catch) {
         catchDao.insertCatch(catch)
     }
