@@ -9,7 +9,9 @@ class CatchRepository(private val catchDao: CatchDao) {
 
     fun getTotalCatches(): Flow<Int> = catchDao.getTotalCatches()
 
-    fun getAllWeights(): Flow<List<String>> = catchDao.getAllWeights()
+    fun getTotalFish(): Flow<Int> = catchDao.getTotalFish()
+
+    fun getAllWeights(): Flow<List<Double>> = catchDao.getAllWeights()
 
     fun getAllLocations(): Flow<List<String>> = catchDao.getAllLocations()
 
@@ -28,4 +30,15 @@ class CatchRepository(private val catchDao: CatchDao) {
     suspend fun getCatchById(id: String): Catch? {
         return catchDao.getCatchById(id)
     }
+
+    suspend fun getAllCatchesList(): List<Catch> {
+        return catchDao.getAllCatchesList()
+    }
+
+    suspend fun getHeaviestCatch(): Catch? {
+        return catchDao.getAllCatchesList()
+            .maxByOrNull { it.fishWeight }
+    }
+
+
 }

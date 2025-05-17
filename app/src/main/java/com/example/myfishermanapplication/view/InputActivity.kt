@@ -158,8 +158,8 @@ fun ColumnWithInput(viewModel: CatchViewModel) {
                     }
                 } else {
                     val newCatch = Catch(
-                        fishCount = fishCount,
-                        fishWeight = fishWeight,
+                        fishCount = fishCount.toIntOrNull() ?: 0,
+                        fishWeight = fishWeight.replace(",", ".").toDoubleOrNull() ?: 0.0,
                         location = location,
                         notes = notes,
                         date = selectedDate

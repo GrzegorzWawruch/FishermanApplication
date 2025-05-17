@@ -10,8 +10,8 @@ import java.util.UUID
 @Entity
 data class Catch(
     @PrimaryKey val id: String = UUID.randomUUID().toString(),
-    val fishCount: String,
-    val fishWeight: String,
+    val fishCount: Int,
+    val fishWeight: Double,
     val location: String,
     val notes: String,
     val date: String

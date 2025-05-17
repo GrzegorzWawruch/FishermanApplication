@@ -26,9 +26,18 @@ interface CatchDao {
     @Query("SELECT COUNT(*) FROM `Catch`")
     fun getTotalCatches(): Flow<Int>
 
+    @Query("SELECT COUNT(*) FROM `Catch`")
+    fun getTotalFish(): Flow<Int>
+
     @Query("SELECT fishWeight FROM `Catch`")
-    fun getAllWeights(): Flow<List<String>>
+    fun getAllWeights(): Flow<List<Double>>
 
     @Query("SELECT location FROM `Catch`")
     fun getAllLocations(): Flow<List<String>>
+
+    @Query("SELECT * FROM `Catch`")
+    suspend fun getAllCatchesList(): List<Catch>
+
+
+
 }

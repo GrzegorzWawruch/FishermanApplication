@@ -1,18 +1,16 @@
 package com.example.myfishermanapplication.database
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import android.util.Log
+import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.myfishermanapplication.model.Catch
 import com.example.myfishermanapplication.model.Fish
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-
-@Database(entities = [Fish::class, Catch::class], version = 15)
+@Database(entities = [Fish::class, Catch::class], version = 28)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun fishDao(): FishDao
     abstract fun catchDao(): CatchDao
@@ -23,32 +21,44 @@ abstract class AppDatabase : RoomDatabase() {
 
         fun getDatabase(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
+                Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
                     "app_database"
                 )
                     .fallbackToDestructiveMigration()
-                    .addCallback(DatabaseCallback())
+                    .addCallback(object : Callback() {
+                        override fun onCreate(db: SupportSQLiteDatabase) {
+                            super.onCreate(db)
+                            CoroutineScope(Dispatchers.IO).launch {
+                                val database = getDatabase(context)
+                                populateDatabase(database.fishDao())
+                            }
+                        }
+                    })
                     .build()
-                INSTANCE = instance
-                instance
+                    .also { INSTANCE = it }
             }
         }
 
-        private class DatabaseCallback : RoomDatabase.Callback() {
+
+
+        private class DatabaseCallback : Callback() {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
-
-                CoroutineScope(Dispatchers.IO).launch {
-                    populateDatabase(INSTANCE!!.fishDao())
-                    // ← nie wywołujemy populateCatchDatabase()
+                Log.d("AppDatabase", "onCreate triggered")
+                INSTANCE?.let { database ->
+                    CoroutineScope(Dispatchers.IO).launch {
+                        populateDatabase(database.fishDao())
+                    }
                 }
-
             }
         }
 
         suspend fun populateDatabase(fishDao: FishDao) {
+            Log.d("AppDatabase", "populateDatabase called")
+
+
             val predefinedFishes = listOf(
                 Fish(name = "Boleń", length = "50", bait= "Woblery, obrotówki, gumy", protectiveDimension = "40", description = "Drapieżnik z rodziny karpiowatych, szybki i waleczny.", imageUri = "fish/bolen.jpg"),
                 Fish(name = "Jesiotr", length = "150", bait= "Rosówki, martwa rybka", protectiveDimension = "70", description = "Duża ryba o wydłużonym ciele, rzadko spotykana w naturalnych wodach.", imageUri = "fish/jesiotr.jpg"),

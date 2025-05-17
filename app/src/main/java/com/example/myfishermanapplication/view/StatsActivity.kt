@@ -19,7 +19,7 @@ import com.example.myfishermanapplication.viewmodel.StatsViewModelFactory
 import com.example.myfishermanapplication.view.ListActivity
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.background
-
+import androidx.compose.runtime.collectAsState
 
 
 class StatsActivity : ComponentActivity() {
@@ -42,8 +42,13 @@ class StatsActivity : ComponentActivity() {
 fun StatsScreen(viewModel: StatsViewModel) {
     val context = LocalContext.current
     val totalCatches by viewModel.totalCatches.collectAsState(initial = 0)
+    val totalFishCount by viewModel.totalFishCount.collectAsState()
     val totalWeight by viewModel.totalWeight.collectAsState()
     val frequentLocation by viewModel.mostFrequentLocation.collectAsState()
+    val heaviestCatch = viewModel.heaviestCatch.collectAsState().value
+    val averageWeight = viewModel.averageWeight.collectAsState()
+
+
 
     Column(
         modifier = Modifier
@@ -54,10 +59,22 @@ fun StatsScreen(viewModel: StatsViewModel) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text("📊 Statystyki połowów", style = MaterialTheme.typography.headlineSmall)
-
         Text("✅ Łączna liczba połowów: $totalCatches")
+        Text(text = "Łączna liczba złowionych ryb: $totalFishCount")
         Text("⚖️ Łączna waga: ${"%.2f".format(totalWeight)} kg")
+        Text("📈 Średnia waga ryby: ${"%.2f".format(averageWeight.value)} kg")
         Text("📍 Najczęstsza lokalizacja: $frequentLocation")
+
+
+        if (heaviestCatch != null) {
+            Text("🏆 Najcięższy połów: ${heaviestCatch.fishWeight} kg,\nlokalizacja: ${heaviestCatch.location},\ndnia: ${heaviestCatch.date}")
+        } else {
+            Text("🏆 Najcięższy połów: brak danych")
+        }
+
+
+
+
 
         Spacer(modifier = Modifier.weight(1f))
 
