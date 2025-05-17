@@ -2,12 +2,12 @@ package com.example.myfishermanapplication.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.myfishermanapplication.database.CatchRepository
+import com.example.myfishermanapplication.database.CatchDatabaseRepository
 import com.example.myfishermanapplication.model.Catch
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class StatsViewModel(private val repository: CatchRepository) : ViewModel() {
+class StatsViewModel(private val repository: CatchDatabaseRepository) : ViewModel() {
 
     val totalCatches = repository.getTotalCatches()
 

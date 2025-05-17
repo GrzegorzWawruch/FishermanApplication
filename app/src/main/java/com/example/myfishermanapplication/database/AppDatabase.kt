@@ -10,7 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [Fish::class, Catch::class], version = 28)
+@Database(entities = [Fish::class, Catch::class], version = 30)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun fishDao(): FishDao
     abstract fun catchDao(): CatchDao
@@ -57,7 +57,6 @@ abstract class AppDatabase : RoomDatabase() {
 
         suspend fun populateDatabase(fishDao: FishDao) {
             Log.d("AppDatabase", "populateDatabase called")
-
 
             val predefinedFishes = listOf(
                 Fish(name = "Boleń", length = "50", bait= "Woblery, obrotówki, gumy", protectiveDimension = "40", description = "Drapieżnik z rodziny karpiowatych, szybki i waleczny.", imageUri = "fish/bolen.jpg"),

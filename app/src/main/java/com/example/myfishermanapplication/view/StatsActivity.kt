@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import com.example.myfishermanapplication.database.AppDatabase
-import com.example.myfishermanapplication.database.CatchRepository
+import com.example.myfishermanapplication.database.CatchDatabaseRepository
 import com.example.myfishermanapplication.viewmodel.StatsViewModel
 import com.example.myfishermanapplication.viewmodel.StatsViewModelFactory
 import com.example.myfishermanapplication.view.ListActivity
@@ -27,7 +27,7 @@ class StatsActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val db = AppDatabase.getDatabase(this)
-        val repository = CatchRepository(db.catchDao())
+        val repository = CatchDatabaseRepository(db.catchDao())
         val viewModelFactory = StatsViewModelFactory(repository)
         val viewModel = ViewModelProvider(this, viewModelFactory)[StatsViewModel::class.java]
 

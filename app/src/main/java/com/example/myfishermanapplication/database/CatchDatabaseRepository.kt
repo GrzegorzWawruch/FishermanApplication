@@ -3,7 +3,7 @@ package com.example.myfishermanapplication.database
 import com.example.myfishermanapplication.model.Catch
 import kotlinx.coroutines.flow.Flow
 
-class CatchRepository(private val catchDao: CatchDao) {
+class CatchDatabaseRepository(private val catchDao: CatchDao) {
 
     val allCatches: Flow<List<Catch>> = catchDao.getAllCatches()
 
@@ -24,6 +24,10 @@ class CatchRepository(private val catchDao: CatchDao) {
     }
 
     suspend fun delete(catch: Catch) {
+        catchDao.deleteCatch(catch)
+    }
+
+    suspend fun deleteCatch(catch: Catch) {
         catchDao.deleteCatch(catch)
     }
 

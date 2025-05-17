@@ -9,37 +9,35 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
-import com.example.myfishermanapplication.database.AppDatabase
-import com.example.myfishermanapplication.database.CatchRepository
+import com.example.myfishermanapplication.database.CatchDatabaseRepository
 import com.example.myfishermanapplication.viewmodel.CatchListViewModel
 import com.example.myfishermanapplication.viewmodel.CatchListViewModelFactory
+import kotlinx.coroutines.launch
+import com.example.myfishermanapplication.database.AppDatabase
 
 class ListActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val db = AppDatabase.getDatabase(this)
-        val catchRepository = CatchRepository(db.catchDao())
+        val db = AppDatabase.getDatabase(applicationContext)
+        val catchRepository = CatchDatabaseRepository(db.catchDao())
         val factory = CatchListViewModelFactory(catchRepository)
         val catchListViewModel = ViewModelProvider(this, factory)[CatchListViewModel::class.java]
 
@@ -53,6 +51,7 @@ class ListActivity : ComponentActivity() {
 fun CatchListScreen(viewModel: CatchListViewModel) {
     val context = LocalContext.current
     val catches by viewModel.allCatches.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -70,7 +69,10 @@ fun CatchListScreen(viewModel: CatchListViewModel) {
                     .fillMaxWidth(),
                 contentPadding = PaddingValues(top = 20.dp)
             ) {
-                items(catches) { catch ->
+                items(
+                    items = catches,
+                    key = { it.id }
+                ) { catch ->
                     var expanded by remember { mutableStateOf(false) }
 
                     Column(
@@ -78,12 +80,22 @@ fun CatchListScreen(viewModel: CatchListViewModel) {
                             .padding(8.dp)
                             .fillMaxWidth()
                             .background(MaterialTheme.colorScheme.surfaceVariant)
-                            .padding(12.dp)
+                            .pointerInput(Unit) {
+                                detectTapGestures(
+                                    onLongPress = {
+                                        val intent = Intent(context, InputActivity::class.java).apply {
+                                            putExtra("catch_id", catch.id)
+                                        }
+                                        context.startActivity(intent)
+                                    },
+                                    onTap = {
+                                        expanded = !expanded
+                                    }
+                                )
+                            }
                     ) {
                         Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable { expanded = !expanded },
+                            modifier = Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
@@ -95,6 +107,13 @@ fun CatchListScreen(viewModel: CatchListViewModel) {
                                 imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                                 contentDescription = if (expanded) "Zwiń" else "Rozwiń"
                             )
+                            IconButton(onClick = {
+                                coroutineScope.launch {
+                                    viewModel.deleteCatch(catch)
+                                }
+                            }) {
+                                Icon(Icons.Default.Delete, contentDescription = "Usuń")
+                            }
                         }
 
                         AnimatedVisibility(visible = expanded) {
@@ -107,7 +126,6 @@ fun CatchListScreen(viewModel: CatchListViewModel) {
                         }
                     }
                 }
-
             }
 
             BottomRow()
@@ -136,7 +154,7 @@ fun BottomRow() {
     Row(
         modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = 10.dp, start = 5.dp, end = 5.dp, top = 0.dp),
+            .padding(bottom = 10.dp, start = 5.dp, end = 5.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.Bottom,
     ) {
