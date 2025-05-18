@@ -17,7 +17,7 @@ class GalleryViewModel(application: Application) : AndroidViewModel(application)
     val fishList: StateFlow<List<Fish>> = _fishList
 
     init {
-        val db = AppDatabase.getDatabase(application) // ← Poprawione
+        val db = AppDatabase.getDatabase(application)
         repository = FishDatabaseRepository(db)
         getAllFish()
     }

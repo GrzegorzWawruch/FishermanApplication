@@ -10,7 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [Fish::class, Catch::class], version = 30)
+@Database(entities = [Fish::class, Catch::class], version = 31)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun fishDao(): FishDao
     abstract fun catchDao(): CatchDao
@@ -81,15 +81,6 @@ abstract class AppDatabase : RoomDatabase() {
             )
             fishDao.insertAll(predefinedFishes)
         }
-
-        // (opcjonalne, jeśli chcesz mieć startowe dane Catch)
-//        suspend fun populateCatchDatabase(catchDao: CatchDao) {
-//            val predefinedCatches = listOf(
-//                Catch(fishCount = "3", fishWeight = "5kg", location = "Jezioro Ładoga", notes = "Słoneczna pogoda, rano."),
-//                Catch(fishCount = "1", fishWeight = "2kg", location = "Wisła, Warszawa", notes = "Silny nurt, trudne warunki.")
-//            )
-//            predefinedCatches.forEach { catchDao.insertCatch(it) }
-//        }
     }
 }
 

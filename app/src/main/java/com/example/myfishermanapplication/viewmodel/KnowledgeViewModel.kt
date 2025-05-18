@@ -32,4 +32,17 @@ class KnowledgeViewModel(application: Application): AndroidViewModel(application
         }
     }
 
+    companion object {
+        fun Factory(appContext: android.content.Context): androidx.lifecycle.ViewModelProvider.Factory {
+            return object : androidx.lifecycle.ViewModelProvider.Factory {
+                override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                    if (modelClass.isAssignableFrom(KnowledgeViewModel::class.java)) {
+                        @Suppress("UNCHECKED_CAST")
+                        return KnowledgeViewModel(appContext.applicationContext as Application) as T
+                    }
+                    throw IllegalArgumentException("Unknown ViewModel class")
+                }
+            }
+        }
+    }
 }

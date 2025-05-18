@@ -39,6 +39,7 @@ android {
     buildFeatures {
         compose = true
     }
+
 }
 
 dependencies {
@@ -83,6 +84,20 @@ dependencies {
     implementation ("com.google.android.exoplayer:exoplayer:2.18.7")
     implementation ("androidx.media3:media3-exoplayer:1.2.0")
     implementation ("androidx.media3:media3-ui:1.2.0")
+
+    // Compose Navigation
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+
+// Compose ViewModel support
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+
+// Optional - jeśli używasz collectAsState() z Flow
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
+
+    implementation("androidx.media3:media3-exoplayer:1.3.1")
+    implementation("androidx.media3:media3-ui:1.3.1")
+
+
 
 
 

@@ -20,7 +20,7 @@
             android:theme="@style/Theme.MyFishermanApplication" />
 
         <activity
-            android:name=".view.GalleryActivity"
+            android:name=".view.GalleryActivity_backup"
             android:exported="false"
             android:label="@string/title_activity_gallery"
             android:theme="@style/Theme.MyFishermanApplication" />

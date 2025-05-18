@@ -38,9 +38,6 @@ class StatsViewModel(private val repository: CatchDatabaseRepository) : ViewMode
         }
     }
 
-//    val averageWeight: StateFlow<Double> = repository.getAllWeights()
-//        .map { if (it.isNotEmpty()) it.average() else 0.0 }
-//        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0.0)
 
     val averageWeight: StateFlow<Double> = flow {
         val catches: List<Catch> = repository.getAllCatchesList()
