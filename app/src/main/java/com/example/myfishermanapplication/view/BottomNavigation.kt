@@ -1,5 +1,6 @@
 package com.example.myfishermanapplication.view
 
+import android.media.MediaPlayer
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,10 +10,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.myfishermanapplication.R
 
 data class BottomNavItem(
     val label: String,
@@ -25,6 +28,7 @@ fun BottomNavigationBar(
     navController: NavHostController,
     items: List<BottomNavItem>
 ) {
+    val context = LocalContext.current
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStackEntry?.destination
 
@@ -41,6 +45,13 @@ fun BottomNavigationBar(
             NavigationBarItem(
                 selected = selected,
                 onClick = {
+                    // 🔊 Odtwarzanie dźwięku po kliknięciu
+                    val mediaPlayer = MediaPlayer.create(context, R.raw.navbar)
+                    mediaPlayer?.apply {
+                        start()
+                        setOnCompletionListener { mp -> mp.release() }
+                    }
+
                     if (!selected) {
                         navController.navigate(item.route) {
                             popUpTo(navController.graph.startDestinationId) { saveState = true }

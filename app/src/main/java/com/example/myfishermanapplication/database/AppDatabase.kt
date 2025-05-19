@@ -10,7 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [Fish::class, Catch::class], version = 31)
+@Database(entities = [Fish::class, Catch::class], version = 32)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun fishDao(): FishDao
     abstract fun catchDao(): CatchDao

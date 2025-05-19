@@ -1,7 +1,6 @@
 package com.example.myfishermanapplication.view
 
 import androidx.compose.animation.*
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,6 +24,8 @@ import com.example.myfishermanapplication.viewmodel.CatchListViewModelFactory
 import kotlinx.coroutines.launch
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.background
+
 
 @Composable
 fun ListScreen(
@@ -111,7 +112,6 @@ fun ListScreen(
                             }
                         }
                     }
-
                 }
             }
         }
@@ -120,6 +120,8 @@ fun ListScreen(
             onClick = {
                 navController.navigate("input")
             },
+            containerColor = Color.Black.copy(alpha = 0.7f),
+            contentColor = Color.White,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp)

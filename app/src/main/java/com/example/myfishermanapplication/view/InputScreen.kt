@@ -1,25 +1,26 @@
 package com.example.myfishermanapplication.view
 
 import android.app.DatePickerDialog
+import android.media.MediaPlayer
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.myfishermanapplication.R
 import com.example.myfishermanapplication.database.CatchDatabaseRepository
 import com.example.myfishermanapplication.model.Catch
 import kotlinx.coroutines.launch
 import java.util.*
-import androidx.compose.ui.draw.clip
-import androidx.compose.foundation.shape.RoundedCornerShape
-
 
 @Composable
 fun InputScreen(
@@ -149,6 +150,12 @@ fun InputScreen(
 
             Button(
                 onClick = {
+                    val mediaPlayer = MediaPlayer.create(context, R.raw.submit)
+                    mediaPlayer?.apply {
+                        start()
+                        setOnCompletionListener { it.release() }
+                    }
+
                     coroutineScope.launch {
                         if (
                             fishCount.isBlank() ||

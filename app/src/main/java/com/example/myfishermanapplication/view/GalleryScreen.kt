@@ -1,6 +1,6 @@
 package com.example.myfishermanapplication.view
 
-import androidx.compose.foundation.background
+import android.media.MediaPlayer
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -9,17 +9,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.myfishermanapplication.R
 import com.example.myfishermanapplication.viewmodel.GalleryViewModel
 
 @Composable
 fun GalleryScreen(navController: NavController) {
     val viewModel: GalleryViewModel = viewModel()
     val fishList by viewModel.fishList.collectAsState()
+    val context = LocalContext.current
 
-    // ⛔️ USUNIĘTO background(Color.LightGray)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -36,6 +38,11 @@ fun GalleryScreen(navController: NavController) {
             items(items = fishList) { fish ->
                 Button(
                     onClick = {
+                        val mediaPlayer = MediaPlayer.create(context, R.raw.gallery)
+                        mediaPlayer?.apply {
+                            start()
+                            setOnCompletionListener { it.release() }
+                        }
                         navController.navigate("knowledge/${fish.id}")
                     },
                     modifier = Modifier
@@ -52,9 +59,7 @@ fun GalleryScreen(navController: NavController) {
                         modifier = Modifier.wrapContentSize()
                     )
                 }
-
             }
         }
     }
 }
-
